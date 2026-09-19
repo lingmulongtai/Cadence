@@ -1,0 +1,18 @@
+<resources>
+    <string name="recording_title">開発用センサー記録</string>
+    <string name="recording_explanation">乗客として3〜5分記録してください。生のセンサー値を保存する機能です。ドットはまだ表示しません。記録中は画面を点灯したままにしてください。</string>
+    <string name="recording_high_precision">100Hzで記録（オフは50Hz）</string>
+    <string name="recording_gps">任意のGPS速度・進行方向も記録</string>
+    <string name="recording_idle">記録できます</string>
+    <string name="recording_starting">開始しています…</string>
+    <string name="recording_active">この端末内に記録中</string>
+    <string name="recording_stopping">ファイルを保存しています…</string>
+    <string name="recording_finished">保存しました。ADBで取り出せます。</string>
+    <string name="recording_failed">記録に失敗しました。このファイルは実測の基準データに使わないでください。</string>
+    <string name="recording_count">%1$dイベント · %2$d秒</string>
+    <string name="recording_start">記録を開始</string>
+    <string name="recording_stop">停止して保存</string>
+    <string name="recording_notification_permission">停止操作ができるよう、通知を許可してから記録してください。</string>
+    <string name="recording_gps_disabled">端末のGPSが無効です。センサーの記録は続けています。</string>
+    <string name="recording_transport">ファイルはADBで取り出すまでアプリ専用領域に残ります。緯度・経度は記録しません。</string>
+</resources>

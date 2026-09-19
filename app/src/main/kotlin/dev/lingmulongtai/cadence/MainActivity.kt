@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,12 +53,13 @@ private fun CadenceContent() {
     MaterialTheme(colorScheme = colors) {
         Surface(modifier = Modifier.fillMaxSize(), color = colors.background) {
             Column(
-                modifier = Modifier.safeDrawingPadding().padding(28.dp),
+                modifier = Modifier.safeDrawingPadding().verticalScroll(rememberScrollState()).padding(28.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
                 Text(stringResource(R.string.app_name), style = MaterialTheme.typography.displayMedium)
                 Text(stringResource(R.string.tagline), style = MaterialTheme.typography.titleMedium)
                 Text(stringResource(R.string.development_status))
+                DevelopmentTools()
             }
         }
     }

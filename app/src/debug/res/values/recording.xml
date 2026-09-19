@@ -1,0 +1,18 @@
+<resources>
+    <string name="recording_title">Developer sensor recording</string>
+    <string name="recording_explanation">Record 3–5 minutes as a passenger. This records raw sensors; it does not display motion cues. Keep the screen on during collection.</string>
+    <string name="recording_high_precision">100 Hz (unchecked: 50 Hz)</string>
+    <string name="recording_gps">Include optional GPS speed and bearing</string>
+    <string name="recording_idle">Ready to record</string>
+    <string name="recording_starting">Starting…</string>
+    <string name="recording_active">Recording on this device</string>
+    <string name="recording_stopping">Finishing file…</string>
+    <string name="recording_finished">Saved. Ready for ADB retrieval.</string>
+    <string name="recording_failed">Recording failed. Do not use this file as reference data.</string>
+    <string name="recording_count">%1$d events · %2$d seconds</string>
+    <string name="recording_start">Start recording</string>
+    <string name="recording_stop">Stop and save</string>
+    <string name="recording_notification_permission">Allow notifications to record with a visible stop control.</string>
+    <string name="recording_gps_disabled">GPS is disabled on this device. Sensors are still being recorded.</string>
+    <string name="recording_transport">Files stay in app storage until you retrieve them using ADB. No latitude or longitude is recorded.</string>
+</resources>
