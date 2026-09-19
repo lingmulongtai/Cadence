@@ -30,8 +30,23 @@ jobs:
           set -euo pipefail
           for apk in app/build/outputs/apk/{debug,release}/*.apk; do
             permissions=$("$ANDROID_HOME/cmdline-tools/latest/bin/apkanalyzer" manifest permissions "$apk")
-            if grep -Eq 'android.permission.(INTERNET|HIGH_SAMPLING_RATE_SENSORS)' <<< "$permissions"; then
+            if grep -Eq 'android\.permission\.(INTERNET|HIGH_SAMPLING_RATE_SENSORS)' <<< "$permissions"; then
               echo "Unexpected permission in $apk"
+              exit 1
+            fi
+          done
+          release_apk=app/build/outputs/apk/release/app-release-unsigned.apk
+          manifest=$("$ANDROID_HOME/cmdline-tools/latest/bin/apkanalyzer" manifest print "$release_apk")
+          if grep -Fq 'SensorRecordingService' <<< "$manifest"; then
+            echo "Debug recorder leaked into the release manifest"
+            exit 1
+          fi
+          # Check the pre-shrink classes as well: R8 renaming cannot hide a source-set leak.
+          test -f app/build/intermediates/built_in_kotlinc/release/compileReleaseKotlin/classes/dev/lingmulongtai/cadence/MainActivity.class
+          for module in app overlay sensor; do
+            release_classes=$(find "$module/build/intermediates" -path '*/release/*' -type f -name '*.class')
+            if grep -Eq '(SensorRecordingService|RecordingController|AndroidSensorSource|RecordingEntryPoint)' <<< "$release_classes"; then
+              echo "Debug recording code leaked into release classes in $module"
               exit 1
             fi
           done
