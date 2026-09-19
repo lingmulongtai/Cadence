@@ -7,6 +7,9 @@ import java.util.Locale
 fun main(args: Array<String>) {
     require(args.size in 1..2) { "Usage: replay input.csv [ordered-output.csv]" }
     val input = File(args[0])
+    require(!input.name.endsWith(".partial", ignoreCase = true)) {
+        "Incomplete .partial recordings are not accepted. Collect and stop a new recording normally."
+    }
     val output = args.getOrNull(1)?.let(::File)
     require(output?.canonicalFile != input.canonicalFile) { "Output must not overwrite the source recording" }
     val events = input.bufferedReader().use(SensorCsv::read)
@@ -22,5 +25,6 @@ fun main(args: Array<String>) {
     println("Events: ${summary.eventCount}")
     println("Duration: ${String.format(Locale.ROOT, "%.3f", summary.durationNs / 1e9)} s")
     summary.sensorCounts.forEach { (type, count) -> println("$type: $count") }
-    println("Raw replay only. This is not vehicle-motion or confidence validation.")
+    println("Raw replay only. Completion/provenance metadata is not verified by this CSV command.")
+    println("This is not vehicle-motion or confidence validation.")
 }
