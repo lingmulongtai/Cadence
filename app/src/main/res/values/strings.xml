@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Cadence</string>
+    <string name="tagline">Peripheral cues for your journey.</string>
+    <string name="development_status">The native app is in development. Motion cues are not available yet.</string>
+</resources>
