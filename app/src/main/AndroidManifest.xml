@@ -7,6 +7,8 @@
     <application
         android:name=".CadenceApplication"
         android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false"
         android:icon="@drawable/ic_cadence"
         android:label="@string/app_name"
         android:supportsRtl="true"
