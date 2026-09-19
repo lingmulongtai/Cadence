@@ -1,0 +1,16 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <application>
+        <service
+            android:name=".recording.SensorRecordingService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse|location">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="User-started, debug-only local sensor recording to validate peripheral motion cues. GPS bearing is optional." />
+        </service>
+    </application>
+</manifest>
