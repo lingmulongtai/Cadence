@@ -10,6 +10,10 @@ An Android app with peripheral visual cues that respond to vehicle acceleration.
 
 Kotlinによるネイティブ版へ移行中です。まだ一般利用向けのAPKはありません。
 フェーズ0の土台・起動確認は完了しています。[検証記録](docs/verification/phase-0.md)。
+フェーズ1のdebug専用センサー記録・JVMリプレイを実装しています。
+[実機ログの収集手順](docs/recording.md)に沿って、市街地走行と停車中の手振り等を各3〜5分収集する段階です。
+実測ログを確認するまでフェーズ1の完了・フェーズ2への移行は行いません。
+[計測機能の検証結果・コミット一覧](docs/verification/phase-1.md)も記録しています。
 旧Expo版は `legacy/expo`（起点 `72c7cf6`）に保存し、履歴を保持しています。
 旧版の完了チェックはネイティブ版の動作保証を意味しません。
 
@@ -47,12 +51,15 @@ Google Play servicesを使用する車両検知とF-Droidの配布条件の整�
 | --- | --- |
 | `SYSTEM_ALERT_WINDOW` | 他アプリ上のドット表示 |
 | `FOREGROUND_SERVICE` / `FOREGROUND_SERVICE_SPECIAL_USE` | 表示中・計測中のサービス |
+| `FOREGROUND_SERVICE_LOCATION` | 任意GPSを使う記録中のサービス |
 | `POST_NOTIFICATIONS` | 動作通知と停止操作（Android 13以降） |
 | `ACTIVITY_RECOGNITION` | 任意の車両検知。拒否時は手動運用 |
 | `ACCESS_COARSE_LOCATION` / `ACCESS_FINE_LOCATION` | 設定から任意で有効にするGPS補助 |
 | `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` | Samsung等での常駐設定案内（後続フェーズ） |
 
-権限は機能の実装時に追加します。200Hz超のサンプリングや画面キャプチャは行いません。
+現在のdebug版には記録用のサービス・通知・位置情報の権限だけを含めます。
+release版には記録サービス、CSV保存コード、これらの権限を含めません。
+他の権限は対応機能の実装時に追加します。200Hz超のサンプリングや画面キャプチャは行いません。
 
 ## 設定の設計
 

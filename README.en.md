@@ -10,6 +10,11 @@
 
 The native Kotlin rewrite is in progress. There is no public native APK yet.
 Phase 0 foundation and launch verification are complete; see the [verification record](docs/verification/phase-0.md).
+Phase 1 includes a debug-only sensor recorder and JVM raw CSV replay.
+The next step is collecting 3–5 minute physical city-drive and stationary hand-shaking sessions;
+see the [collection guide](docs/recording.md). Phase 1 remains incomplete until real recordings are verified,
+and phase 2 will not start before that gate is met.
+See the [recording verification and commit history](docs/verification/phase-1.md).
 The original Expo implementation remains on `legacy/expo` at `72c7cf6`.
 Old completion checkboxes do not establish native functionality.
 Screenshots and an overlay GIF will be added after the renderer is implemented and verified.
@@ -37,6 +42,10 @@ The native app does not declare `INTERNET`. It has no networking, accounts, serv
 ads or analytics SDK. Sensor data is not automatically transmitted. Debug CSV recordings are
 stored in app-specific external storage and explicitly retrieved by the developer using ADB.
 Cloud backup is disabled.
+
+The current debug APK requests foreground-service, notification and optional location permissions
+for recording, including `FOREGROUND_SERVICE_LOCATION` when GPS is selected.
+The release variant excludes the recorder, CSV storage code and recording permissions.
 
 Planned permissions: `SYSTEM_ALERT_WINDOW` for the overlay; `FOREGROUND_SERVICE` and
 `FOREGROUND_SERVICE_SPECIAL_USE` for active work; `POST_NOTIFICATIONS` for controls on Android 13+;
