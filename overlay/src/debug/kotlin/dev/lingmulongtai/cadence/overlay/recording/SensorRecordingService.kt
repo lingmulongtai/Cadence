@@ -72,7 +72,8 @@ class SensorRecordingService : Service() {
             return START_NOT_STICKY
         }
         stopping.set(false)
-        val channel = Channel<RecordedEvent>(1024)
+        // About 16 seconds across five 100 Hz streams; tolerate short IO/GC stalls without unbounded RAM.
+        val channel = Channel<RecordedEvent>(8192)
         events = channel
         recordingJob = scope.launch { record(channel, highPrecision, gps) }
         return START_NOT_STICKY
