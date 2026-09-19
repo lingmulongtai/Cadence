@@ -63,3 +63,14 @@ Thumbs.db
 
 # Webdev artifacts (checkpoint zips, migrations, etc.)
 .webdev/
+
+# Local development and signing material (never publish)
+.codex/
+.gradle/
+**/build/
+local.properties
+*.keystore
+.env
+.env.*
+!.env.example
+captures/
