@@ -1,4 +1,8 @@
-plugins { alias(libs.plugins.android.library) }
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
+}
 
 android {
     namespace = "dev.lingmulongtai.cadence.overlay"
@@ -16,4 +20,8 @@ dependencies {
     implementation(project(":motion"))
     implementation(project(":sensor"))
     implementation(project(":data"))
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    debugImplementation(libs.coroutines.android)
+    debugImplementation(libs.androidx.core)
 }

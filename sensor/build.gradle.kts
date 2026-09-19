@@ -1,4 +1,7 @@
-plugins { alias(libs.plugins.android.library) }
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.ksp)
+}
 
 android {
     namespace = "dev.lingmulongtai.cadence.sensor"
@@ -12,4 +15,8 @@ android {
 
 kotlin { jvmToolchain(17) }
 
-dependencies { implementation(project(":motion")) }
+dependencies {
+    implementation(project(":motion"))
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+}
