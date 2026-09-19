@@ -9,7 +9,8 @@ An Android app with peripheral visual cues that respond to vehicle acceleration.
 ## 現在の状態
 
 Kotlinによるネイティブ版へ移行中です。まだ一般利用向けのAPKはありません。
-旧Expo版は `legacy/expo`（起点 `72c7cf6`）に保存し、履歴を保持します。
+フェーズ0の土台・起動確認は完了しています。[検証記録](docs/verification/phase-0.md)。
+旧Expo版は `legacy/expo`（起点 `72c7cf6`）に保存し、履歴を保持しています。
 旧版の完了チェックはネイティブ版の動作保証を意味しません。
 
 オーバーレイの画像・GIFは、描画機能を実装・検証してから追加します。
@@ -79,7 +80,9 @@ Gradle Wrapperがビルドツールと依存関係を取得します（アプリ
 .\gradlew.bat :app:assembleDebug :motion:test :app:lintDebug
 ```
 
-macOS / Linuxでは `./gradlew` を使います。Gradle骨格は移行フェーズ0で追加します。
+macOS / Linuxでは `./gradlew` を使います。
+Windowsで作業パスに日本語等を含む場合、Android Gradle Pluginのパス検査が失敗します。
+ASCIIのみの場所にcloneするか、その場所へのjunction経由でビルドしてください。
 デバッグAPKの出力先は `app/build/outputs/apk/debug/app-debug.apk` です。
 
 | モジュール | 責務 |

@@ -1,19 +1,37 @@
-# Project TODO
+# 残作業
 
-- [x] Onboarding screen (iOS-style feature introduction)
-- [x] Home screen with large toggle and live dot preview
-- [x] Settings screen with mode, appearance, and sensitivity options
-- [x] Motion cues overlay with 8 animated dots on screen edges
-- [x] Accelerometer integration for vehicle motion detection
-- [x] Low-pass filter for smooth sensor data
-- [x] Spring-based dot animation using react-native-reanimated
-- [x] Dot color adaptation and customization
-- [x] Dot size and count customization
-- [x] Persistent settings with AsyncStorage
-- [x] Notification-based quick toggle (Android control panel equivalent)
-- [x] Theme configuration (iOS-authentic colors)
-- [x] App icon and branding
-- [ ] Adaptive inverse-color dots (detect background and show opposite color, iOS-faithful)
-- [ ] Advanced vehicle motion filter using gyroscope + accelerometer fusion
-- [ ] Reject hand-shake and phone vibration (only respond to vehicle motion)
-- [ ] Update settings to include adaptive color option as default
+段階と受け入れ条件は [docs/development.md](docs/development.md) を参照。
+旧版の完了項目は `legacy/expo:todo.md` と [旧UXの記録](docs/legacy/README.md) に残す。
+
+## フェーズ1
+
+- [ ] サービスが所有するSensorManagerの購読・停止
+- [ ] debug専用CSV記録とADBでの取り出し
+- [ ] 純粋KotlinのCSVリプレイとJUnit5テスト
+- [ ] 市街地走行・停車中の手振りの実測ログを各3〜5分取得し、testdataでリプレイ
+- [ ] 歩行、高速道路、電車、端末固定と手持ちの比較ログを収集
+- [ ] データ量を確認し、Git LFSが必要な場合だけ作者へ確認
+
+## フェーズ2
+
+- [ ] センサーのフォールバック、重力除去、地磁気を使わない姿勢補正
+- [ ] GPSと姿勢の方位基準を整合し、未確定の前後符号は縮退動作へ
+- [ ] 10〜20秒PCA、可変dtの2次Butterworth、デッドゾーン、感度
+- [ ] RMSと鉛直加速度、自動モードの車両判定による連続confidence
+- [ ] 合成波の減衰・不等間隔・PCA・ゼロ出力のテスト
+- [ ] 歩行／手振り実測ログの全区間でconfidence < 0.2をCIで検証
+
+## フェーズ3〜5
+
+- [ ] SurfaceView / Canvas / Choreographer、タッチ非遮断のオーバーレイ
+- [ ] 画面端バンド、スプリング、同心ハロー、回転
+- [ ] Composeのオンボーディング・ホーム・設定、DataStore、サービス共有プレビュー
+- [ ] QSタイル、通知の停止、電池最適化除外とOne UIの案内
+- [ ] Transition APIと任意権限、30秒起動／60秒終了の実機検証
+
+## フェーズ6
+
+- [ ] 自動車・電車／バス・船の実測調整
+- [ ] 1時間の電池消費、CPU、遅延、120Hz描画の実測
+- [ ] ネイティブのスクリーンショット・GIF
+- [ ] GMS依存とF-Droid条件の整合、ビルド再現性、署名・初回リリース

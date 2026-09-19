@@ -9,6 +9,7 @@
 ## Status
 
 The native Kotlin rewrite is in progress. There is no public native APK yet.
+Phase 0 foundation and launch verification are complete; see the [verification record](docs/verification/phase-0.md).
 The original Expo implementation remains on `legacy/expo` at `72c7cf6`.
 Old completion checkboxes do not establish native functionality.
 Screenshots and an overlay GIF will be added after the renderer is implemented and verified.
@@ -64,7 +65,8 @@ The wrapper downloads build dependencies; the installed app does not access the 
 ./gradlew :app:assembleDebug :motion:test :app:lintDebug
 ```
 
-On Windows use `./gradlew.bat`. The Gradle skeleton is added during phase 0.
+On Windows use `./gradlew.bat`. Use an ASCII-only checkout path or a junction if AGP
+rejects a path containing non-ASCII characters.
 Debug output: `app/build/outputs/apk/debug/app-debug.apk`.
 
 Modules: `:app` (Compose UI, tiles), `:overlay` (service, sensor ownership and Canvas renderer),
