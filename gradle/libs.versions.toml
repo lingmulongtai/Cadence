@@ -8,6 +8,7 @@ junit = "5.11.4"
 hilt = "2.59.2"
 ksp = "2.3.9"
 coroutines = "1.10.2"
+json = "20250517"
 
 [libraries]
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "core" }
@@ -22,6 +23,7 @@ kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref 
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+json = { module = "org.json:json", version.ref = "json" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -33,20 +33,25 @@ object SensorCsv {
 
     /** The caller owns [input]. Reject corrupt rows instead of silently passing incomplete evidence. */
     fun read(input: Reader): List<RecordedEvent> {
+        return buildList { forEach(input) { add(it) } }
+    }
+
+    /** Validate large exports without retaining a whole recording in memory. The caller owns [input]. */
+    fun forEach(input: Reader, consume: (RecordedEvent) -> Unit): Long {
         val lines = input.buffered().lineSequence().iterator()
         require(lines.hasNext() && lines.next().removePrefix("\uFEFF") == HEADER) { "Unsupported CSV header" }
-        val events = mutableListOf<RecordedEvent>()
-        var lineNumber = 1
+        var count = 0L
         while (lines.hasNext()) {
-            lineNumber++
             val line = lines.next()
-            try {
-                events += parseRow(line)
+            val event = try {
+                parseRow(line)
             } catch (error: IllegalArgumentException) {
-                throw IllegalArgumentException("CSV line $lineNumber: ${error.message}", error)
+                throw IllegalArgumentException("CSV line ${count + 2}: ${error.message}", error)
             }
+            consume(event)
+            count++
         }
-        return events
+        return count
     }
 
     private fun parseRow(line: String): RecordedEvent {

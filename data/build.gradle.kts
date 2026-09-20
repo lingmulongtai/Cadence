@@ -11,3 +11,15 @@ android {
 }
 
 kotlin { jvmToolchain(17) }
+
+dependencies {
+    debugImplementation(project(":motion"))
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.kotlin.test)
+    // Android provides JSONObject on devices; this implementation is only for local JVM tests.
+    testImplementation(libs.json)
+    testRuntimeOnly(libs.junit.launcher)
+}
+
+tasks.withType<Test>().configureEach { useJUnitPlatform() }
