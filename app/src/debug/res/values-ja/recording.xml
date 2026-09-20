@@ -1,0 +1,33 @@
+<resources>
+    <string name="tagline">センサー記録プレビュー</string>
+    <string name="development_status">記録をZIPで保存・共有できます。モーションキューはまだ利用できません。</string>
+    <string name="recording_title">新しい記録</string>
+    <string name="recording_explanation">乗客として3〜5分記録してください。記録中は画面を点灯したままにしてください。</string>
+    <string name="recording_high_precision">100Hzで記録（オフは50Hz）</string>
+    <string name="recording_gps">任意のGPS速度・進行方向も記録</string>
+    <string name="recording_idle">記録できます</string>
+    <string name="recording_starting">開始しています…</string>
+    <string name="recording_active">この端末内に記録中</string>
+    <string name="recording_stopping">ファイルを保存しています…</string>
+    <string name="recording_finished">保存しました。下の「保存済みの記録」から取り出せます。</string>
+    <string name="recording_failed">記録に失敗しました。このファイルは実測の基準データに使わないでください。</string>
+    <string name="recording_count">%1$dイベント · %2$d秒</string>
+    <string name="recording_start">記録を開始</string>
+    <string name="recording_stop">停止して保存</string>
+    <string name="recording_notification_permission">停止操作ができるよう、通知を許可してから記録してください。</string>
+    <string name="recording_gps_disabled">端末のGPSが無効です。センサーの記録は続けています。</string>
+    <string name="recording_transport">CSVと端末情報を1つのZIPにまとめます。保存先とファイル名を選べます。緯度・経度は含みません。</string>
+    <string name="recording_name">記録名（省略可）</string>
+    <string name="recording_name_example">例：市街地・手持ち</string>
+    <string name="recording_details">センサーの詳細</string>
+    <string name="recording_saved_title">保存済みの記録</string>
+    <string name="recording_saved_empty">停止して保存した記録がここに表示されます。アプリを閉じても残ります。</string>
+    <string name="recording_unnamed">名前なしの記録</string>
+    <string name="recording_save_as">名前をつけて保存</string>
+    <string name="recording_share">ZIPを共有</string>
+    <string name="recording_export_busy">保存・共有の準備中…</string>
+    <string name="recording_export_saved">選んだ保存先にZIPを保存しました。マイファイルなどから送れます。</string>
+    <string name="recording_export_failed">保存・共有できませんでした。元の記録は残っています。もう一度お試しください。</string>
+    <string name="recording_export_interrupted">前回のZIP保存は中断されました。保存先のファイルは未完成の可能性があります。元の記録からもう一度保存してください。</string>
+    <string name="recording_list_failed">保存済みの記録を読み込めませんでした。アプリを開き直してください。</string>
+</resources>

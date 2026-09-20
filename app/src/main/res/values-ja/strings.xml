@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Cadence</string>
+    <string name="tagline">移動中の画面閲覧を、さりげなく支える。</string>
+    <string name="development_status">ネイティブ版を開発中です。モーションキューはまだ利用できません。</string>
+</resources>
