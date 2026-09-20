@@ -8,7 +8,10 @@ An Android app with peripheral visual cues that respond to vehicle acceleration.
 
 ## 現在の状態
 
-Kotlinによるネイティブ版へ移行中です。まだ一般利用向けのAPKはありません。
+Kotlinによるネイティブ版へ移行中です。
+**[記録用プレビュー v0.1.0-alpha.1 をダウンロード](https://github.com/lingmulongtai/Cadence/releases/tag/v0.1.0-alpha.1)**。
+スマホだけで記録し、保存先・名前を選んでZIPを書き出したり、共有したりできます。
+このプリリリースにはモーションキュー・車両判定・手ぶれ除去は含まれません。
 フェーズ0の土台・起動確認は完了しています。[検証記録](docs/verification/phase-0.md)。
 フェーズ1のdebug専用センサー記録・JVMリプレイを実装しています。
 [実機ログの収集手順](docs/recording.md)に沿って、市街地走行と停車中の手振り等を各3〜5分収集する段階です。
@@ -36,15 +39,22 @@ OS標準機能の提供状況は端末・地域・更新状態に依存します
 
 ## インストール
 
-現在はソースから開発版をビルドします。GitHub ReleasesでのAPK配布とF-Droid対応は
-後続フェーズの計画です。公開済み・審査済みとは扱いません。
+スマホで[プリリリース](https://github.com/lingmulongtai/Cadence/releases/tag/v0.1.0-alpha.1)の
+`Cadence-0.1.0-alpha.1-recorder.apk` を開いてインストールしてください（Android 8.0以降）。
+「記録を開始」→「停止して保存」→「名前をつけて保存」で、ダウンロードなどの好きなフォルダに
+ZIPを保存できます。「ZIPを共有」も使えます。PC・USBデバッグは不要です。
+[詳しい収集手順](docs/recording.md)と[画面・検証結果](docs/verification/recorder-alpha.1.md)を参照してください。
+
+通常製品版とF-Droid対応は後続フェーズの計画です。
 Google Play servicesを使用する車両検知とF-Droidの配布条件の整合も、公開前に検証します。
 
 ## プライバシーと権限
 
 ネイティブ版は `INTERNET` 権限を宣言せず、ネットワーク通信、アカウント、サーバー、
 広告、分析SDKを持ちません。センサーデータの自動送信は行いません。
-開発用CSVログは端末のアプリ専用ストレージに保存し、開発者がADBで明示的に取り出します。
+記録用プレビューはCSVログを端末のアプリ専用ストレージに保存します。
+ユーザーの操作でCSVと端末情報のJSONをZIPにまとめ、選んだ保存先や共有先へ渡します。
+保存をキャンセル・失敗しても元の記録は残ります。緯度・経度は記録しません。
 バックアップも無効にします。
 
 | 権限 | 計画している用途 |

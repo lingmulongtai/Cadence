@@ -8,7 +8,10 @@
 
 ## Status
 
-The native Kotlin rewrite is in progress. There is no public native APK yet.
+The native Kotlin rewrite is in progress.
+**[Download recorder preview v0.1.0-alpha.1](https://github.com/lingmulongtai/Cadence/releases/tag/v0.1.0-alpha.1)**.
+Record on your phone, choose a filename and folder, or share a ZIP directly. No PC or USB debugging is needed.
+This prerelease does not include motion cues, vehicle detection or hand-motion filtering.
 Phase 0 foundation and launch verification are complete; see the [verification record](docs/verification/phase-0.md).
 Phase 1 includes a debug-only sensor recorder and JVM raw CSV replay.
 The next step is collecting 3–5 minute physical city-drive and stationary hand-shaking sessions;
@@ -34,13 +37,20 @@ Drawing above system UI, the notification shade, Quick Settings or the lock scre
 
 ## Installation and privacy
 
-Build from source for now. GitHub Releases and F-Droid distribution are future work;
-no release or F-Droid acceptance is claimed. Play services recognition also needs a distribution
+Download `Cadence-0.1.0-alpha.1-recorder.apk` from the
+[prerelease page](https://github.com/lingmulongtai/Cadence/releases/tag/v0.1.0-alpha.1) on your Android 8.0+ phone.
+Start recording → Stop and save → Save as. Choose Downloads or another folder and edit the ZIP filename.
+Saved recordings remain available after reopening the app; Share ZIP opens the system share sheet.
+See the [collection guide](docs/recording.md) and [verification/screenshots](docs/verification/recorder-alpha.1.md).
+
+Production and F-Droid distribution remain future work. Play services recognition also needs a distribution
 compatibility review before an F-Droid build can be offered.
 
 The native app does not declare `INTERNET`. It has no networking, accounts, server,
 ads or analytics SDK. Sensor data is not automatically transmitted. Debug CSV recordings are
-stored in app-specific external storage and explicitly retrieved by the developer using ADB.
+stored in app-specific external storage. Only an explicit save/share action exports a ZIP containing
+the original CSV and JSON device metadata. Cancellation or export failure leaves originals intact.
+No latitude or longitude is recorded.
 Cloud backup is disabled.
 
 The current debug APK requests foreground-service, notification and optional location permissions
