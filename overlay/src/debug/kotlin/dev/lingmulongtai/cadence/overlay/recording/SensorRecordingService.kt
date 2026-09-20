@@ -62,6 +62,7 @@ class SensorRecordingService : Service() {
         if (recordingJob?.isActive == true) return START_NOT_STICKY
         val highPrecision = intent.getBooleanExtra(HIGH_PRECISION, false)
         val gps = intent.getBooleanExtra(GPS, false)
+        val label = intent.getStringExtra(LABEL).orEmpty().trim().take(120)
         try {
             var serviceTypes = if (Build.VERSION.SDK_INT >= 34) ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE else 0
             if (gps && Build.VERSION.SDK_INT >= 29) serviceTypes = serviceTypes or ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
@@ -75,11 +76,11 @@ class SensorRecordingService : Service() {
         // About 16 seconds across five 100 Hz streams; tolerate short IO/GC stalls without unbounded RAM.
         val channel = Channel<RecordedEvent>(8192)
         events = channel
-        recordingJob = scope.launch { record(channel, highPrecision, gps) }
+        recordingJob = scope.launch { record(channel, highPrecision, gps, label) }
         return START_NOT_STICKY
     }
 
-    private suspend fun record(channel: Channel<RecordedEvent>, highPrecision: Boolean, gps: Boolean) {
+    private suspend fun record(channel: Channel<RecordedEvent>, highPrecision: Boolean, gps: Boolean, label: String) {
         var file: File? = null
         var count = 0L
         val startNs = SystemClock.elapsedRealtimeNanos()
@@ -96,6 +97,8 @@ class SensorRecordingService : Service() {
                 .put("schemaVersion", 1)
                 .put("complete", false)
                 .put("dataKind", "unreviewed")
+                .put("label", label)
+                .put("recordedAtEpochMillis", System.currentTimeMillis())
                 .put("manufacturer", Build.MANUFACTURER)
                 .put("model", Build.MODEL)
                 .put("sdk", Build.VERSION.SDK_INT)
@@ -146,6 +149,7 @@ class SensorRecordingService : Service() {
             }
             check(count > 0) { "No sensor events received; recording is incomplete" }
             metadata.put("complete", true).put("eventCount", count)
+                .put("durationSeconds", (SystemClock.elapsedRealtimeNanos() - startNs) / 1_000_000_000)
             // Publish completion metadata first. Any failure still leaves a .partial data file.
             writeMetadata(metadataFile, metadata)
             check(partial.renameTo(completed)) { "Cannot finalize the recording" }
@@ -223,6 +227,7 @@ class SensorRecordingService : Service() {
         const val STOP = "dev.lingmulongtai.cadence.recording.STOP"
         const val HIGH_PRECISION = "high_precision"
         const val GPS = "gps"
+        const val LABEL = "label"
         private const val CHANNEL = "sensor-recording"
         private const val NOTIFICATION_ID = 1001
     }

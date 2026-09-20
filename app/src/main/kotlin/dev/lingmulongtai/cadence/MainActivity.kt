@@ -27,12 +27,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent { CadenceContent() }
+        setContent { CadenceContent(this) }
     }
 }
 
 @Composable
-private fun CadenceContent() {
+private fun CadenceContent(activity: ComponentActivity) {
     val colors = if (isSystemInDarkTheme()) {
         darkColorScheme(
             primary = Color(0xFF0A84FF),
@@ -59,7 +59,7 @@ private fun CadenceContent() {
                 Text(stringResource(R.string.app_name), style = MaterialTheme.typography.displayMedium)
                 Text(stringResource(R.string.tagline), style = MaterialTheme.typography.titleMedium)
                 Text(stringResource(R.string.development_status))
-                DevelopmentTools()
+                DevelopmentTools(activity)
             }
         }
     }

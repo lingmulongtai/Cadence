@@ -29,7 +29,7 @@ class RecordingController @Inject constructor(@param:ApplicationContext private 
     internal val mutableState = MutableStateFlow(RecordingState())
     val state = mutableState.asStateFlow()
 
-    fun start(highPrecision: Boolean, includeGps: Boolean) {
+    fun start(highPrecision: Boolean, includeGps: Boolean, label: String = "") {
         if (state.value.isActive) return
         mutableState.value = RecordingState(phase = RecordingPhase.STARTING)
         try {
@@ -37,6 +37,7 @@ class RecordingController @Inject constructor(@param:ApplicationContext private 
                 Intent(context, SensorRecordingService::class.java)
                     .setAction(SensorRecordingService.START)
                     .putExtra(SensorRecordingService.HIGH_PRECISION, highPrecision)
+                    .putExtra(SensorRecordingService.LABEL, label.trim().take(120))
                     .putExtra(SensorRecordingService.GPS, includeGps))
         } catch (error: RuntimeException) {
             mutableState.value = RecordingState(phase = RecordingPhase.FAILED, error = error.message)
