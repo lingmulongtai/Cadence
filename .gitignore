@@ -16,6 +16,7 @@ captures/
 *.aab
 *.jks
 *.keystore
+*.p12
 *.key
 *.pem
 .env

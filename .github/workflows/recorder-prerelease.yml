@@ -1,0 +1,91 @@
+name: Recorder prerelease
+
+on:
+  push:
+    tags: ['v*-alpha.*']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: recorder-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Check tag, main ancestry and release notes
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-alpha\.[0-9]+$ ]]
+          git merge-base --is-ancestor HEAD origin/main
+          test -s "docs/releases/$TAG.md"
+      - name: Install the pinned SDK
+        run: sdkmanager 'platforms;android-37.0' 'build-tools;36.0.0'
+      - name: Restore the dedicated recorder signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.CADENCE_SIGNING_KEYSTORE }}
+        run: |
+          set -euo pipefail
+          test -n "$KEYSTORE_BASE64"
+          umask 077
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/cadence-recorder.p12"
+      - name: Test, lint and build the signed recorder and production boundary
+        env:
+          CADENCE_SIGNING_STORE_FILE: ${{ runner.temp }}/cadence-recorder.p12
+          CADENCE_SIGNING_PASSWORD: ${{ secrets.CADENCE_SIGNING_PASSWORD }}
+        run: |
+          set -euo pipefail
+          test -n "$CADENCE_SIGNING_PASSWORD"
+          ./gradlew :motion:test :data:testDebugUnitTest :app:lintDebug :app:lintRelease :app:assembleDebug :app:assembleRelease --stacktrace
+          bash .github/scripts/check-apks.sh
+      - name: Verify and package the installable APK
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          analyzer="$ANDROID_HOME/cmdline-tools/latest/bin/apkanalyzer"
+          apk=app/build/outputs/apk/debug/app-debug.apk
+          test "$("$analyzer" manifest application-id "$apk")" = dev.lingmulongtai.cadence
+          test "$("$analyzer" manifest version-name "$apk")" = "${TAG#v}"
+          test "$("$analyzer" manifest debuggable "$apk")" = true
+          mkdir dist
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose --print-certs "$apk" > dist/APK-SIGNATURE.txt
+          cp "$apk" "dist/Cadence-${TAG#v}-recorder.apk"
+          printf 'tag=%s\ncommit=%s\nvariant=debug-recorder\n' "$TAG" "$(git rev-parse HEAD)" > dist/BUILD.txt
+          (cd dist && sha256sum ./*.apk > SHA256SUMS)
+      - name: Publish a recorder prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG" dist/* --verify-tag --prerelease \
+            --title "Cadence ${TAG#v} — センサー記録プレビュー" \
+            --notes-file "docs/releases/$TAG.md"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: recorder-verification
+          path: |
+            motion/build/reports/tests/
+            data/build/reports/tests/
+            app/build/reports/
+            dist/
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Remove temporary signing material
+        if: always()
+        run: rm -f "$RUNNER_TEMP/cadence-recorder.p12"

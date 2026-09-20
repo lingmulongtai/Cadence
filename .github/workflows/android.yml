@@ -2,7 +2,7 @@ name: Android
 
 on:
   push:
-    branches: [main, 'feat/**']
+    branches: [main, 'feat/**', 'codex/**']
   pull_request:
 
 permissions:
@@ -23,39 +23,17 @@ jobs:
       - name: Install the pinned SDK
         run: sdkmanager 'platforms;android-37.0' 'build-tools;36.0.0'
       - name: Test, lint and build both variants
-        run: ./gradlew :motion:test :app:lintDebug :app:lintRelease :app:assembleDebug :app:assembleRelease --stacktrace
+        run: ./gradlew :motion:test :data:testDebugUnitTest :app:lintDebug :app:lintRelease :app:assembleDebug :app:assembleRelease --stacktrace
       - name: Check packaged privacy boundary
         shell: bash
-        run: |
-          set -euo pipefail
-          for apk in app/build/outputs/apk/{debug,release}/*.apk; do
-            permissions=$("$ANDROID_HOME/cmdline-tools/latest/bin/apkanalyzer" manifest permissions "$apk")
-            if grep -Eq 'android\.permission\.(INTERNET|HIGH_SAMPLING_RATE_SENSORS)' <<< "$permissions"; then
-              echo "Unexpected permission in $apk"
-              exit 1
-            fi
-          done
-          release_apk=app/build/outputs/apk/release/app-release-unsigned.apk
-          manifest=$("$ANDROID_HOME/cmdline-tools/latest/bin/apkanalyzer" manifest print "$release_apk")
-          if grep -Fq 'SensorRecordingService' <<< "$manifest"; then
-            echo "Debug recorder leaked into the release manifest"
-            exit 1
-          fi
-          # Check the pre-shrink classes as well: R8 renaming cannot hide a source-set leak.
-          test -f app/build/intermediates/built_in_kotlinc/release/compileReleaseKotlin/classes/dev/lingmulongtai/cadence/MainActivity.class
-          for module in app overlay sensor; do
-            release_classes=$(find "$module/build/intermediates" -path '*/release/*' -type f -name '*.class')
-            if grep -Eq '(SensorRecordingService|RecordingController|AndroidSensorSource|RecordingEntryPoint)' <<< "$release_classes"; then
-              echo "Debug recording code leaked into release classes in $module"
-              exit 1
-            fi
-          done
+        run: bash .github/scripts/check-apks.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: verification-reports
           path: |
             motion/build/reports/tests/
+            data/build/reports/tests/
             app/build/reports/
           if-no-files-found: ignore
           retention-days: 7

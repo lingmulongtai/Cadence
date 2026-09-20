@@ -13,8 +13,8 @@ android {
         applicationId = "dev.lingmulongtai.cadence"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
-        versionName = "0.1.0-dev"
+        versionCode = 2
+        versionName = "0.1.0-alpha.1"
     }
 
     buildTypes {
@@ -23,6 +23,17 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
         }
+    }
+    // The public recorder deliberately uses the debug source set. Keep a stable dedicated
+    // signing identity for phone updates, while ordinary developer builds use the local debug key.
+    providers.environmentVariable("CADENCE_SIGNING_STORE_FILE").orNull?.let { keyPath ->
+        val recorder = signingConfigs.create("recorder") {
+            storeFile = file(keyPath)
+            storePassword = providers.environmentVariable("CADENCE_SIGNING_PASSWORD").get()
+            keyAlias = "cadence"
+            keyPassword = storePassword
+        }
+        buildTypes.getByName("debug").signingConfig = recorder
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
